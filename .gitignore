@@ -1,0 +1,6 @@
+# Files
+*.env
+
+# Forlders
+server/node_modules
+files/
