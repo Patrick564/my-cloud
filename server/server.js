@@ -1,9 +1,10 @@
 const express = require('express');
-// const bodyParser = require('body-parser');
-// const routes = require('./routes');
 const fileUpload = require('express-fileupload');
 
 const contentRouter = require('./routes/content');
+// const createDirRouter = require('./routes/create-dir');
+const uploadRouter = require('./routes/upload');
+const downloadRouter = require('./routes/download');
 
 const app = express();
 
@@ -15,8 +16,10 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Routing
-app.get('/', (req, res) => res.send('Hi hi hi...'));
+app.get('/', (req, res) => res.redirect('/content'));
 app.use('/content', contentRouter);
+app.use('/upload', uploadRouter);
+app.use('/download', downloadRouter);
 
 app.listen(port, () => {
     console.log(`Server running at port ${port}`);

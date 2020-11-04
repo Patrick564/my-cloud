@@ -1,6 +1,8 @@
 # Files
 *.env
+config.json
 
 # Forlders
+.vscode
 server/node_modules
 files/
