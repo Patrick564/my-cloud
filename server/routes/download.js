@@ -1,13 +1,11 @@
 const router = require('express').Router();
-const fs = require('fs');
-const path = require('path');
 
-const rootPath = path.dirname(require.main.path) + '/files/';
+const processPath = require('../lib/path');
 
 router.post('/:path*?', (req, res) => {
-    let dirPath = rootPath + (req.params.path || '') + (req.params['0'] || '');
+    let dir = processPath(req.params.path, req.params['0']);
 
-    res.download(dirPath + '/' + req.body.fileName);
+    res.download(dir.absolutePath + req.body.name);
 });
 
 module.exports = router;

@@ -2,7 +2,6 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 
 const contentRouter = require('./routes/content');
-// const createDirRouter = require('./routes/create-dir');
 const uploadRouter = require('./routes/upload');
 const downloadRouter = require('./routes/download');
 
