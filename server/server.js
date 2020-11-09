@@ -1,5 +1,6 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
+const cors = require('cors');
 
 const contentRouter = require('./routes/content');
 const uploadRouter = require('./routes/upload');
@@ -13,6 +14,7 @@ const port = 5000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(fileUpload());
+app.use(cors());
 
 // Routing
 app.get('/', (req, res) => res.redirect('/content'));

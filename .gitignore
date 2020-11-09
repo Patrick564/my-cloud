@@ -1,8 +1,12 @@
 # Files
 *.env
 config.json
+*.svg
+*.ico
+*.png
 
 # Forlders
 .vscode
 server/node_modules
+client/node_modules
 files/
