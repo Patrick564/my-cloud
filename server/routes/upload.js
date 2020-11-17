@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const path = require('path');
 
 const processPath = require('../lib/path');
 
@@ -7,20 +8,21 @@ router.post('/:path*?', async (req, res) => {
     let content = req.files;
     let contentStats = { names: [], sizes: 0 };
     
-    if (!content || Object.keys(content).length === 0) {
+    if (!content) {
         return res.status(400).send({
             message: 'No files selected to upload.',
+            success: false,
             path: dir,
         });
     }
 
-    if (Object.keys(content).length === 1) {
-        content.files.mv(dir.absolutePath + content.files.name);
+    if (!Array.isArray(content.files)) {
+        content.files.mv(path.join(dir.absolutePath, content.files.name));
         contentStats.names.push(content.files.name);
         contentStats.sizes += content.files.size / (1024 * 1024);
     } else {
         content.files.forEach((file) => {
-            file.mv(dir.absolutePath + file.name);
+            file.mv(path.join(dir.absolutePath, file.name));
             contentStats.names.push(file.name);
             contentStats.sizes += file.size / (1024 * 1024);
         });
@@ -28,6 +30,7 @@ router.post('/:path*?', async (req, res) => {
 
     res.json({
         message: 'File(s) upload successfully.',
+        success: true,
         path: dir,
         contentStats,
     });

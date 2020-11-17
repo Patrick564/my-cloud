@@ -16,6 +16,7 @@ router.get('/:path*?', async (req, res) => {
         if (error) {
             return res.status(400).json({
                 message: 'Directory not finded.',
+                success: false,
                 error: error.code,
             });
         }
@@ -30,6 +31,7 @@ router.get('/:path*?', async (req, res) => {
 
         res.json({
             message: 'Content show successfully.',
+            success: true,
             path: dir,
             content,
         });
@@ -44,6 +46,7 @@ router.post('/:path*?', async (req, res) => {
     if (!name) {
         return res.status(400).json({
             message: 'Enter a valid name.',
+            success: false,
         });
     }
 
@@ -52,11 +55,13 @@ router.post('/:path*?', async (req, res) => {
             if (error.code === 'EEXIST') {
                 return res.status(400).json({
                     message: 'The folder already exist.',
+                    success: false,
                     path: dir,
                 });
             } else if (error.code === 'ENOENT') {
                 return res.status(400).json({
                     message: 'Route not finded.',
+                    success: false,
                     path: dir,
                 });
             }
@@ -64,6 +69,7 @@ router.post('/:path*?', async (req, res) => {
 
         res.status(200).json({
             message: 'Directory created.',
+            success: true,
             path: dir,
             name,
         });
@@ -82,12 +88,14 @@ router.patch('/:path*?', async (req, res) => {
         if (error) {
             return res.status(400).json({
                 message: 'An error ocurred.',
+                success: false,
                 error: error.code,
             });
         }
 
         res.status(200).json({
             message: 'Rename complete.',
+            success: true,
             path: dir,
             oldName,
             newName,
@@ -102,7 +110,8 @@ router.delete('/:path*?', async (req, res) => {
 
     if (!name) {
         return res.status(400).json({
-            message: 'No file or folder selected.'
+            message: 'No file or folder selected.',
+            success: false,
         });
     }
 
@@ -111,6 +120,7 @@ router.delete('/:path*?', async (req, res) => {
             if (error.code === 'ENOENT') {
                 return res.status(400).json({
                     message: 'Route not finded.',
+                    success: false,
                     path: dir,
                 });
             }
@@ -121,12 +131,14 @@ router.delete('/:path*?', async (req, res) => {
                 if (error) {
                     return res.status(400).json({
                         message: 'Some error happen.',
+                        success: false,
                         error: error.code,
                     });
                 }
 
                 res.status(200).json({
                     message: 'Folder deleted.',
+                    success: true,
                     name,
                     path: dir,
                 });
@@ -136,12 +148,14 @@ router.delete('/:path*?', async (req, res) => {
                 if (error) {
                     return res.status(400).json({
                         message: 'Some error happen.',
+                        success: false,
                         error: error.code,
                     });
                 }
 
                 res.status(200).json({
                     message: 'File deleted.',
+                    success: true,
                     name,
                     path: dir,
                 });
