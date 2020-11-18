@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <search-bar @search="nextFolder"></search-bar>
-      <back-button @back="previusFolder"></back-button>
+      <search-bar @search="next"></search-bar>
+      <back-button @back="previus"></back-button>
       <info-button :route="path"></info-button>
     </div>
 
@@ -10,7 +10,7 @@
       <div>
         <p>Folders</p>
         <div v-for="(folder, key) of content.directories" :key="`folder[${key}]`">
-          <div @dblclick="nextFolder(folder)" :id="folder">
+          <div @dblclick="next(folder)" :id="folder">
             {{ folder }}
             <delete-button @reload="getContent" :path="path" :name="folder"></delete-button>
           </div>
@@ -29,7 +29,7 @@
 
       <div>
         <upload-button @reload="getContent" :path="path"></upload-button>
-        <create-folder @reload="getContent" :path="path"></create-folder>
+        <create-button @reload="getContent" :path="path"></create-button>
       </div>
     </div>
 
@@ -40,13 +40,14 @@
 </template>
 
 <script>
-import Api from '../api/api';
-import Search from './Search.vue';
+import SearchBar from './Search-bar.vue';
 import BackButton from './Back-button.vue';
 import InfoButton from './Info-button.vue';
 import UploadButton from './Upload-button.vue';
-import CreateFolder from './Create-folder.vue';
+import CreateButton from './Create-button.vue';
 import DeleteButton from './Delete-button.vue';
+
+import Api from '../api/api';
 
 const apiInstance = new Api();
 
@@ -66,28 +67,29 @@ export default {
   },
 
   methods: {
-    async getContent(path = this.path) {
+    async getContent() {
       try {
-        const response = await apiInstance.getContent(path);
+        const response = await apiInstance.getContent(this.path);
         this.content = response.content;
         this.path = response.path.relativePath;
-        // this.success = response.success;
         this.load = true;
       } catch (error) {
-        // this.message = error.response.data.message;
-        // this.success = error.response.data.success;
-        this.previusFolder();
+        if (!error.response.data.success) {
+          this.previus();
+        } else {
+          this.message = error.response.data.message;
+        }
       }
     },
 
-    previusFolder() {
+    previus() {
       const splited = this.path.split('/');
       const sliced = splited.slice(0, -1);
       this.path = sliced.join('/') ? sliced.join('/') : '/';
       this.getContent();
     },
 
-    nextFolder(folderName) {
+    next(folderName) {
       // eslint-disable-next-line prefer-template
       this.path += this.path === '/' ? folderName : '/' + folderName;
       this.getContent();
@@ -95,10 +97,10 @@ export default {
   },
 
   components: {
-    'search-bar': Search,
+    'search-bar': SearchBar,
     'back-button': BackButton,
     'info-button': InfoButton,
-    'create-folder': CreateFolder,
+    'create-button': CreateButton,
     'upload-button': UploadButton,
     'delete-button': DeleteButton,
   },

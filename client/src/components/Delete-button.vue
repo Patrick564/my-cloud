@@ -22,7 +22,7 @@ export default {
         await apiInstance.deleteContent(this.path, this.name);
         this.$emit('reload');
       } catch (error) {
-        console.log(error);
+        console.log(error.response.data.message);
       }
     },
   },

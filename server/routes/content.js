@@ -106,7 +106,7 @@ router.patch('/:path*?', async (req, res) => {
 router.delete('/:path*?', async (req, res) => {
     let dir = processPath(req.params.path, req.params['0']);
     let name = req.body.name;
-    let dirPath = dir.absolutePath + name;
+    let dirPath = path.join(dir.absolutePath, name);
 
     if (!name) {
         return res.status(400).json({
